@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="YIXAS Community — curated tools and community resources. Browse products and pay securely via PayPal.me.">
+  <title>YIXAS COMMUNITY 2.0</title>
+  <link rel="icon" href="assets/yixas.png" />
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <img src="assets/yixas.png" alt="YIXAS logo" class="logo" id="logo">
+    <div class="header-title">
+      <h1 id="title">YIXAS   COMMUNITY   2.0</h1>
+    </div>
+    <nav class="header-actions" role="navigation" aria-label="Primary">
+      <button id="discordBtn" class="round-btn discord-btn" title="Join our Discord" aria-label="Join our Discord"> 
+        <img src="assets/discord.png" alt="Discord" class="discord-icon">
+      </button>
+      <div class="cart" id="cart">
+        <button id="cartBtn" class="round-btn" aria-haspopup="true" aria-expanded="false">Cart (<span id="cartCount">0</span>)</button>
+        <div id="cartDropdown" class="cart-dropdown hidden" role="region" aria-label="Shopping cart">
+          <ul id="cartItems"></ul>
+          <div class="cart-actions">
+            <span id="cartTotal">Total: €0.00</span>
+            <button id="checkoutBtn" class="round-btn primary">Checkout</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main" class="content" role="main">
+    <!-- Combined features section that lists specs for all products on one page -->
+    <section id="features" class="features hidden">
+      <h2>Features</h2>
+      <div id="featuresList" class="features-list"></div>
+    </section>
+  <section class="products" id="products">
+  <article class="product" data-name="cheat ios" data-price="5" data-image="assets/cheat ios.png" data-prices='[{"id":"weekly","label":"Weekly","price":12},{"id":"monthly","label":"Monthly","price":30},{"id":"lifetime","label":"Lifetime","price":70}]' data-specs="&lt;h3&gt;iOS Cheats (Chapter 6)&lt;/h3&gt;&lt;p&gt;(Mod Menu)&lt;/p&gt;&lt;h4&gt;Supports&lt;/h4&gt;&lt;ul&gt;&lt;li&gt;Non Jailbreak (You will need a device certificate)&lt;/li&gt;&lt;li&gt;Jailbreak (No $3 extra)&lt;/li&gt;&lt;/ul&gt;&lt;h4&gt;Features&lt;/h4&gt;&lt;ul&gt;&lt;li&gt;Bullet Teleport&lt;/li&gt;&lt;li&gt;FOV Modifier&lt;/li&gt;&lt;li&gt;Color Customizer&lt;/li&gt;&lt;/ul&gt;&lt;h4&gt;Price&lt;/h4&gt;&lt;ul&gt;&lt;li&gt;Lifetime = $70&lt;/li&gt;&lt;li&gt;Monthly = $30&lt;/li&gt;&lt;li&gt;Weekly = $12&lt;/li&gt;&lt;/ul&gt;&lt;p style='color:#ffcc00;font-weight:700'&gt;⚠️iOS UNDER MAINTENANCE FOR NOW⚠️&lt;/p&gt;">
+        <div class="thumb"></div>
+  <h2>cheat ios</h2>
+        <button class="addBtn round-btn">Add to cart</button>
+      </article>
+
+  <article class="product" data-name="cheat android" data-price="10" data-image="assets/cheat android.png" data-prices='[{"id":"daily","label":"Daily","price":5},{"id":"3days","label":"3 Days","price":12},{"id":"weekly","label":"Weekly","price":15},{"id":"monthly","label":"Monthly","price":45}]' data-specs="&lt;h3&gt;💥 Yixas Solutions Slotted 🔒&lt;/h3&gt;&lt;hr/&gt;&lt;h4&gt;📱 Supported Systems:&lt;/h4&gt;&lt;ul&gt;&lt;li&gt;All Android Devices (Root required)&lt;/li&gt;&lt;li&gt;VPHONEGAGA (NON-Root)&lt;/li&gt;&lt;/ul&gt;&lt;hr/&gt;&lt;h4&gt;🎯 Aim Features:&lt;/h4&gt;&lt;ul&gt;&lt;li&gt;Magic Bullets Head&lt;/li&gt;&lt;li&gt;Magic Bullets Body&lt;/li&gt;&lt;li&gt;Extra Aim Assist&lt;/li&gt;&lt;li&gt;No Recoil (scuffed)&lt;/li&gt;&lt;li&gt;Controller Support&lt;/li&gt;&lt;/ul&gt;&lt;h4&gt;👁️ Visuals:&lt;/h4&gt;&lt;ul&gt;&lt;li&gt;Antenna&lt;/li&gt;&lt;li&gt;High FOV&lt;/li&gt;&lt;/ul&gt;&lt;h4&gt;🧩 Exploits:&lt;/h4&gt;&lt;ul&gt;&lt;li&gt;Bullet Teleport&lt;/li&gt;&lt;li&gt;Fast Vehicles&lt;/li&gt;&lt;li&gt;Large Players&lt;/li&gt;&lt;li&gt;Pickaxe MagicBullets&lt;/li&gt;&lt;/ul&gt;&lt;hr/&gt;&lt;h4&gt;💰 Prices:&lt;/h4&gt;&lt;ul&gt;&lt;li&gt;Daily – $5&lt;/li&gt;&lt;li&gt;3 Days – $12&lt;/li&gt;&lt;li&gt;Weekly – $15&lt;/li&gt;&lt;li&gt;Monthly – $45&lt;/li&gt;&lt;/ul&gt;">
+        <div class="thumb"></div>
+  <h2>cheat android</h2>
+        <button class="addBtn round-btn">Add to cart</button>
+      </article>
+    </section>
+
+    <!-- Product details modal -->
+    <div id="productModal" class="modal hidden" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <button class="close">×</button>
+        <img id="modalImage" src="assets/cheat ios.png" alt="Product" class="modal-image">
+        <h2 id="modalTitle">Product Details</h2>
+  <p id="modalSpecs">Product specifications...</p>
+        <div id="modalOptions" class="modal-options" aria-hidden="true"></div>
+        <div class="modal-actions">
+          <span id="modalPrice">€0.00</span>
+          <button id="modalAddBtn" class="round-btn primary">Add to cart</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- footer + quick nav -->
+  <footer class="site-footer">
+    <div class="footer-left"></div>
+  </footer>
+
+  <!-- Custom right-side scroll track -->
+  <div id="scrollTrack" class="scroll-track" aria-hidden="true">
+    <div id="scrollThumb" class="scroll-thumb" role="presentation"></div>
+  </div>
+
+  <!-- community overlay removed -->
+
+  <script src="js/script.js"></script>
+</body>
+</html>

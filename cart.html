@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cart - YIXAS COMMUNITY 2.0</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <img src="assets/yixas.png" alt="YIXAS" class="logo">
+    <h1 id="title">YIXAS   COMMUNITY   2.0</h1>
+    <div class="header-actions" style="margin-left:auto;padding-right:24px;">
+      <a href="index.html" class="round-btn">Continue shopping</a>
+    </div>
+  </header>
+
+  <main id="main" class="content" style="padding:40px;">
+    <section class="cart-panel">
+      <h2 class="cart-title">Your Cart</h2>
+      <div id="cartArea">
+        <ul id="cartList"></ul>
+        <div id="cartSummary" class="cart-summary">
+          <strong id="totalText">Total: €0.00</strong>
+          <div class="cart-summary-actions">
+            <button id="checkoutNow" class="round-btn primary">Checkout with PayPal</button>
+            <button id="clearCart" class="round-btn">Clear</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/cart.js"></script>
+</body>
+</html>
