@@ -1,0 +1,237 @@
+#main-cursor-bubble, .main-cursor-bubble {
+  position: fixed;
+  pointer-events: none;
+  z-index: 12;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 30%, rgba(255,120,120,0.85), rgba(200,30,30,0.22));
+  box-shadow: 0 0 32px 8px rgba(226,15,15,0.10);
+  transform: translate(-50%,-50%);
+  transition: background 0.2s;
+  filter: blur(0.5px);
+  mix-blend-mode: screen;
+}
+:root{
+  --red:#e20f0f;
+  --dark:#0b0b0b;
+  --glass:rgba(255,255,255,0.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#fff;background:linear-gradient(180deg,var(--dark),#1a0505);overflow:auto; -webkit-overflow-scrolling:touch}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:-2}
+.snow-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.snow-flake{background:rgba(200,200,200,0.9)}
+.site-header{display:flex;align-items:center;gap:20px;padding:24px 32px;position:relative;z-index:60}
+.logo{width:72px;height:72px;object-fit:cover;border-radius:50%;border:2px solid rgba(255,255,255,0.06);background:none;animation:logoFloat 6s ease-in-out infinite;box-shadow:0 10px 30px rgba(0,0,0,0.6);transition:transform .35s ease,box-shadow .35s ease,filter .35s ease}
+.logo:hover{transform:scale(1.08) rotate(3deg);box-shadow:0 20px 60px rgba(226,15,15,0.32);filter:drop-shadow(0 8px 24px rgba(226,15,15,0.12))}
+/* Title in black for visibility over red/black background; animated pulse */
+#title{font-size:36px;letter-spacing:4px;text-transform:uppercase;color:#000;padding:6px 14px;border-radius:8px;background:rgba(255,255,255,0.14);display:inline-block;animation:titlePulse 3.6s ease-in-out infinite;font-weight:700}
+@keyframes titlePulse{0%{transform:translateY(0) scale(1);box-shadow:0 0 0 rgba(0,0,0,0)}50%{transform:translateY(-6px) scale(1.03);box-shadow:0 10px 40px rgba(226,15,15,0.10)}100%{transform:translateY(0) scale(1);box-shadow:0 0 0 rgba(0,0,0,0)}}
+@keyframes titleGlow{0%{filter:blur(0px);opacity:.9}50%{filter:blur(2px);opacity:1}100%{filter:blur(0px);opacity:.95}}
+.cart{margin-left:auto;position:relative}
+.round-btn{background:linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));border:2px solid rgba(255,255,255,0.06);color:#fff;padding:10px 16px;border-radius:999px;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease;position:relative;overflow:hidden}
+.round-btn::after{content:'';position:absolute;inset:0;border-radius:999px;box-shadow:inset 0 0 40px rgba(255,80,80,0.06);opacity:0;transition:opacity .25s}
+.round-btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(226,15,15,0.18)}
+.round-btn:hover::after{opacity:1}
+.round-btn.primary{background:linear-gradient(90deg,var(--red),#ff5a5a);border:none}
+.cart-dropdown{position:absolute;right:0;top:56px;width:320px;background:linear-gradient(180deg,rgba(0,0,0,0.6),rgba(10,0,0,0.7));border-radius:12px;padding:12px;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+.hidden{display:none}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;padding:40px}
+.product{background:var(--glass);padding:18px;border-radius:14px;border:1px solid rgba(255,255,255,0.04);backdrop-filter: blur(6px);box-shadow:0 6px 30px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;gap:12px;transition:transform .2s ease}
+.product:hover{transform:translateY(-12px) rotate(-0.5deg);box-shadow:0 14px 40px rgba(0,0,0,.6);}
+.product{position:relative;overflow:visible}
+/* decorative floating orbs behind products */
+.product::before, .product::after{content:'';position:absolute;width:120px;height:120px;border-radius:50%;z-index:-1;opacity:0.08;filter:blur(20px)}
+.product::before{background:radial-gradient(circle at 30% 30%, rgba(226,15,15,0.9), rgba(80,10,10,0) 60%);top:-30px;left:-30px;animation:floatSlow 6s ease-in-out infinite}
+.product::after{background:radial-gradient(circle at 70% 70%, rgba(255,255,255,0.12), rgba(60,10,10,0) 60%);bottom:-20px;right:-20px;animation:floatSlow 7s ease-in-out infinite reverse}
+
+@keyframes floatSlow{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.02)}100%{transform:translateY(0) scale(1)}}
+.thumb{width:140px;height:100px;border-radius:10px;background:linear-gradient(90deg,#3a0a0a,#6a1010);box-shadow:inset 0 0 30px rgba(0,0,0,.6)}
+
+/* product image support */
+.product[data-image] .thumb{background-size:cover;background-position:center}
+
+/* Modal styles */
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:120}
+.modal.hidden{display:none}
+.modal-backdrop{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.6),rgba(20,0,0,0.6));backdrop-filter:blur(6px)}
+.modal-content{position:relative;background:linear-gradient(180deg,rgba(20,0,0,0.9),rgba(10,0,0,0.95));padding:18px;border-radius:14px;width:min(760px,92%);max-width:760px;z-index:121;box-shadow:0 20px 80px rgba(0,0,0,0.8);animation:modalPop .36s cubic-bezier(.2,.9,.3,1)}
+.modal-image{width:220px;height:140px;object-fit:cover;border-radius:10px;display:block;margin:0 auto 12px}
+.modal-content h2{color:#fff;text-align:center;margin-bottom:8px}
+.modal-content p{color:#ddd;text-align:center;margin-bottom:12px}
+.modal-actions{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.modal .close{position:absolute;right:12px;top:12px;background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer}
+@keyframes modalPop{0%{transform:translateY(8px) scale(.98);opacity:0}100%{transform:translateY(0) scale(1);opacity:1}}
+.modal-image{animation:modalImageIn .42s cubic-bezier(.2,.9,.3,1)}
+@keyframes modalImageIn{0%{transform:scale(.9);opacity:0}60%{transform:scale(1.03);opacity:1}100%{transform:scale(1);opacity:1}}
+.price{font-weight:700}
+.modal-options{display:flex;gap:10px;justify-content:center;margin:12px 0 18px}
+.plan-option{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,background .18s}
+.plan-option:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(226,15,15,0.14);background:linear-gradient(90deg,rgba(226,15,15,0.08),rgba(255,80,80,0.03))}
+.plan-option.active{background:linear-gradient(90deg,#ff4040,#ff8a8a);border:none;color:#111;transform:scale(1.02)}
+.plan-option small{display:block;color:#fff;opacity:0.9;font-size:12px}
+#cursorTrail{position:fixed;pointer-events:none;inset:0;z-index:10}
+.cursor-halo{position:fixed;pointer-events:none;z-index:20;transform:translate(-50%,-50%);border-radius:50%;mix-blend-mode:screen;transition:width .18s ease,height .18s ease,background .18s ease,opacity .18s ease}
+.cursor-halo::after{content:'';position:absolute;inset:-12px;border-radius:50%;background:radial-gradient(circle at 40% 35%, rgba(226,15,15,0.06), rgba(0,0,0,0));filter:blur(8px);opacity:1}
+/* remove old bubble rule (no longer used) */
+/* subtle heartbeat animation for primary buttons */
+.round-btn.primary{animation:heartbeat 3s ease-in-out infinite}
+@keyframes heartbeat{0%{transform:scale(1)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+/* small responsive */
+@media (max-width:600px){#title{font-size:20px}.site-header{padding:12px}}
+
+/* Discord button next to the title */
+.discord-btn{width:56px;height:56px;padding:6px;display:flex;align-items:center;justify-content:center;margin-left:12px;border-radius:12px;background:linear-gradient(180deg,rgba(80,80,120,0.06),rgba(0,0,0,0.02));border:1px solid rgba(255,255,255,0.04)}
+.discord-icon{width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 6px 18px rgba(0,0,0,0.6));transform-origin:center}
+.discord-btn{animation:discordPulse 3.6s ease-in-out infinite}
+.discord-btn:hover{transform:translateY(-4px) scale(1.03)}
+@keyframes discordPulse{0%{transform:scale(1)}50%{transform:scale(1.05) rotate(-2deg)}100%{transform:scale(1)}}
+
+@media (max-width:800px){.discord-btn{width:44px;height:44px}.discord-icon{width:28px;height:28px}}
+
+/* Features section */
+.features{padding:40px;background:linear-gradient(180deg,rgba(10,0,0,0.4),rgba(6,0,0,0.6));margin:24px;border-radius:12px;margin-top:20px}
+.features h2{color:#ffbaba;letter-spacing:2px;margin-bottom:12px}
+.features-list{display:flex;flex-direction:column;gap:12px}
+.feature-item{background:rgba(0,0,0,0.45);padding:12px;border-radius:10px;border:1px solid rgba(255,0,0,0.06)}
+.feature-item h3{color:#ffd6d6;margin-bottom:6px}
+
+/* Footer and quick nav */
+.site-footer{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;padding:10px 20px;gap:18px;z-index:80;background:linear-gradient(180deg,rgba(0,0,0,0.02),rgba(0,0,0,0.06))}
+.site-footer .footer-left{color:rgba(200,240,220,0.9);background:transparent;padding:8px 12px;border-radius:8px;margin-left:6px}
+.footer-nav{display:flex;flex-direction:row;gap:8px;margin-right:6px}
+.footer-link{background:transparent;border:1px solid rgba(255,255,255,0.04);color:#cfe7e0;padding:8px 12px;border-radius:999px;cursor:pointer;transition:all .18s}
+.footer-link:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(226,15,15,0.12);background:linear-gradient(90deg,rgba(226,15,15,0.06),rgba(255,80,80,0.02))}
+
+/* when active, make the footer link red */
+.footer-link.active{background:linear-gradient(90deg,var(--red),#ff5a5a);color:#111;border:none;box-shadow:0 12px 40px rgba(226,15,15,0.18)}
+
+/* community highlight on discord icon when clicked from footer */
+.discord-highlight{animation:discordHighlight 1s ease-in-out forwards}
+@keyframes discordHighlight{0%{filter:drop-shadow(0 0 0 rgba(255,0,0,0))}50%{filter:drop-shadow(0 8px 28px rgba(226,15,15,0.65))}100%{filter:drop-shadow(0 14px 44px rgba(226,15,15,0.85))}}
+
+/* ensure content scrolls smoothly */
+html{scroll-behavior:smooth}
+
+/* stronger community highlight for when the user clicks Community (more intense) */
+.discord-highlight-strong{animation:discordHighlightStrong 1s ease-in-out forwards}
+@keyframes discordHighlightStrong{
+  0%{
+    filter: drop-shadow(0 0 0 rgba(255,0,0,0));
+    transform: scale(1);
+  }
+  50%{
+    filter: drop-shadow(0 14px 36px rgba(226,15,15,0.9));
+    transform: scale(1.06);
+  }
+  100%{
+    filter: drop-shadow(0 20px 60px rgba(226,15,15,1));
+    transform: scale(1.02);
+  }
+}
+
+/* ensure .hidden behaves consistently */
+.hidden{display:none!important}
+
+/* Custom right-side scroll track */
+.scroll-track{position:fixed;right:12px;top:12px;bottom:12px;width:18px;background:linear-gradient(180deg,rgba(0,0,0,0.2),rgba(10,0,0,0.35));border-radius:12px;padding:4px;z-index:70}
+.scroll-thumb{width:100%;height:80px;background:linear-gradient(180deg,var(--red),#a10a0a);border-radius:10px;box-shadow:0 6px 24px rgba(226,15,15,0.18);cursor:pointer;transition:transform .12s ease,box-shadow .18s}
+.scroll-thumb:active{transform:scale(1.02);box-shadow:0 12px 40px rgba(226,15,15,0.28)}
+.scroll-track:hover .scroll-thumb{transform:translateX(-2px)}
+
+@media (max-width:800px){.scroll-track{display:none}} /* hide custom scrollbar on small screens */
+
+.community-overlay{position:fixed;inset:0;pointer-events:none;z-index:150}
+.community-overlay .arch{
+  position:absolute;
+  right:10%;
+  bottom:12px; /* anchor above taskbar */
+  width:420px;
+  height:160px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  pointer-events:none;
+}
+.community-overlay .bow-svg{
+  width:360px;
+  height:140px;
+  image-rendering:pixelated;
+  transform:translateY(8px);
+  filter:drop-shadow(0 8px 12px rgba(0,0,0,0.6));
+}
+.server-logo{
+  position:absolute;
+  right:calc(10% + 72px);
+  bottom:40px;
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  overflow:hidden;
+  background:#111;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:3px solid rgba(255,0,0,0.12);
+  box-shadow:0 8px 18px rgba(0,0,0,0.6), inset 0 2px 6px rgba(255,255,255,0.02);
+}
+.server-logo img{width:100%;height:100%;object-fit:cover;display:block}
+.arrow{position:fixed;width:36px;height:12px;background:linear-gradient(90deg,var(--red),#ff5a5a);border-radius:6px;transform-origin:center;display:none}
+.arrow::after{content:'';position:absolute;right:-10px;top:-8px;width:0;height:0;border-left:12px solid var(--red);border-top:8px solid transparent;border-bottom:8px solid transparent}
+.flying-text{position:fixed;z-index:200;pointer-events:none;display:none;font-weight:700;font-size:12pt;color:#ff2b2b;background:transparent;padding:6px 8px;border-radius:6px;text-shadow:0 3px 10px rgba(0,0,0,0.6)}
+.flying-text.slow-move{transition:transform 3200ms cubic-bezier(.18,.9,.3,1), opacity 400ms ease}
+
+.arrow img{width:36px;height:36px;border-radius:50%}
+.trail-anim{animation:trailPulse 1.2s ease-in-out infinite}
+@keyframes trailPulse{0%{transform:translateY(0) scale(1);opacity:1;color:var(--red);text-shadow:0 0 0 rgba(0,0,0,0)}50%{transform:translateY(-8px) scale(1.05);opacity:1;color:#000;text-shadow:0 6px 18px rgba(226,15,15,0.8)}100%{transform:translateY(0) scale(1);opacity:1;color:var(--red);text-shadow:0 0 0 rgba(0,0,0,0)}}
+.arrow-logo-tip{position:fixed;width:36px;height:36px;border-radius:50%;box-shadow:0 10px 40px rgba(226,15,15,0.22);z-index:160}
+@keyframes trailPulse{0%{transform:translateY(0) scale(1);opacity:1}50%{transform:translateY(-6px) scale(1.02);opacity:0.95}100%{transform:translateY(0) scale(1);opacity:1}}
+
+/* impact animation for discord icon */
+.discord-impact{animation:discordImpact .9s cubic-bezier(.2,.9,.3,1) forwards}
+@keyframes discordImpact{0%{transform:scale(1) rotate(0);opacity:1;filter:drop-shadow(0 0 0 rgba(0,0,0,0))}50%{transform:scale(1.18) rotate(8deg);filter:drop-shadow(0 18px 44px rgba(226,15,15,0.9))}100%{transform:scale(1) rotate(0);opacity:1}}
+
+/* Cart row flash animation for visual feedback */
+.cart-row{transition:background .28s ease,transform .28s ease}
+.cart-row-flash{animation:cartFlash .9s cubic-bezier(.2,.9,.3,1)}
+@keyframes cartFlash{0%{background:linear-gradient(90deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));transform:scale(1.01)}40%{background:linear-gradient(90deg,rgba(226,15,15,0.26),rgba(255,80,80,0.06));transform:scale(1.02)}100%{background:transparent;transform:scale(1)}}
+
+/* Bump the cart button/count when an item is added */
+.cart-bump{animation:cartBump .52s cubic-bezier(.2,.9,.3,1)}
+@keyframes cartBump{0%{transform:translateY(0) scale(1)}30%{transform:translateY(-6px) scale(1.08)}60%{transform:translateY(0) scale(0.98)}100%{transform:translateY(0) scale(1)}}
+
+/* product add pulse (small glow on the product card) */
+.product-add-pulse{animation:productAddPulse .7s cubic-bezier(.2,.9,.3,1)}
+@keyframes productAddPulse{0%{box-shadow:0 6px 30px rgba(0,0,0,.5);transform:translateY(0)}30%{box-shadow:0 18px 60px rgba(226,15,15,0.26);transform:translateY(-6px) scale(1.02)}100%{box-shadow:0 6px 30px rgba(0,0,0,.5);transform:translateY(0)}}
+
+/* Cart page specific styles */
+#cartArea{padding:12px}
+#cartList{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+#cartList .cart-row{background:linear-gradient(180deg,rgba(20,0,0,0.6),rgba(10,0,0,0.5));border:1px solid rgba(226,15,15,0.12);padding:12px;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.55);transition:transform .28s cubic-bezier(.2,.9,.3,1),box-shadow .28s,background .28s}
+#cartList .cart-row:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(226,15,15,0.14)}
+
+/* entry animation for rows */
+.cart-row-enter{animation:cartRowIn .52s cubic-bezier(.2,.9,.3,1)}
+@keyframes cartRowIn{0%{transform:translateY(18px);opacity:0}60%{transform:translateY(-6px);opacity:1}100%{transform:translateY(0);opacity:1}}
+
+/* stronger flash used for quantity/last-added */
+.cart-row-flash{animation:cartFlash .9s cubic-bezier(.2,.9,.3,1);border-left:6px solid rgba(226,15,15,0.9)}
+
+/* empty cart style */
+.cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;border-radius:12px;background:linear-gradient(180deg,rgba(10,0,0,0.5),rgba(6,0,0,0.6));color:#f6dede}
+.cart-empty h3{color:#fff;margin:6px 0;font-size:20px}
+.cart-empty p{color:#f2bebe;margin:0 0 8px;font-size:13px}
+.cart-empty .empty-graphic{width:92px;height:92px;border-radius:14px;background:radial-gradient(circle at 30% 30%,rgba(255,80,80,0.12),rgba(0,0,0,0.4));display:flex;align-items:center;justify-content:center;margin-bottom:10px;box-shadow:inset 0 4px 12px rgba(255,255,255,0.02)}
+.cart-empty .empty-graphic svg{width:60px;height:60px;filter:drop-shadow(0 8px 20px rgba(226,15,15,0.18))}
+
+/* checkout button styling */
+#checkoutNow{background:linear-gradient(90deg,var(--red),#b50909);border:none;color:#111;padding:10px 14px;border-radius:10px;box-shadow:0 10px 36px rgba(226,15,15,0.18);transition:transform .18s,box-shadow .18s}
+#checkoutNow:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 22px 60px rgba(226,15,15,0.28)}
+#clearCart{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}
+
+/* subtle pulsing on total when updated */
+.total-pulse{animation:totalPulse .9s cubic-bezier(.2,.9,.3,1)}
+@keyframes totalPulse{0%{transform:scale(1);color:#fff}40%{transform:scale(1.04);color:#ffbaba}100%{transform:scale(1);color:#fff}}
+
